@@ -14,13 +14,13 @@ class State(BaseModel, Base):
     name = Column(String(128), nullable=False)
 
     if os.environ.get("HBNB_TYPE_STORAGE") == 'db':
-        cities = relationship("City", backref="State", cascade="all, delete")
+        cities = relationship("City", backref="state", cascade="delete")
     else:
         @property
         def cities(self):
             """Get a list of all related Cities."""
             cities_list = []
-            for city in FileStorage.all(City).values():
+            for city in list(FileStorage.all(City).values()):
                 if city.id == self.id:
                     cities_list.append(city)
             return cities_list
