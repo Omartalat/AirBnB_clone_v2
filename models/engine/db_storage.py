@@ -30,21 +30,36 @@ class DBStorage:
         if os.environ.get('HBNB_ENV') == 'test':
             Base.metadata.drop_all(self.__engine)
 
+
     def all(self, cls=None):
         """Query all objects depending on the class name (argument cls)"""
+        from models.state import State
+        from models.city import City
+        from models.user import User
+        from models.place import Place
+        from models.review import Review
+        from models.amenity import Amenity
+
         obj_dict = {}
         try:
+            class_dict = {
+                "State": State,
+                "City": City,
+                "User": User,
+                "Place": Place,
+                "Review": Review,
+                "Amenity": Amenity
+            }
+
             if cls:
                 if isinstance(cls, str):
-                    try:
-                        cls = eval(cls)
-                    except NameError:
+                    cls = class_dict.get(cls)
+                    if not cls:
                         raise ValueError(f"Class '{cls}' is not defined.")
                 objs = self.__session.query(cls).all()
             else:
-                classes = [State, City, User, Place, Review, Amenity]
                 objs = []
-                for class_ in classes:
+                for class_ in class_dict.values():
                     objs.extend(self.__session.query(class_).all())
 
             for obj in objs:
