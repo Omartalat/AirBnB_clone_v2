@@ -1,7 +1,9 @@
 #!/usr/bin/python3
 """ Console Module """
 import cmd
+from datetime import datetime
 import sys
+import uuid
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -73,7 +75,7 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] is '{' and pline[-1] is'}'\
+                    if pline[0] == '{' and pline[-1] =='}'\
                             and type(eval(pline)) is dict:
                         _args = pline
                     else:
@@ -114,17 +116,42 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, args):
-        """ Create an object of any class"""
+        c_name = att_name = att_val = ''
         if not args:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+        args = args.partition(" ")
+        c_name = args[0]
+        if c_name not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
+        args = args[2].split()
+        
+        kwargs = {}
+
+        for arg in args:
+            if "=" in arg:
+                att_name, att_val = arg.split("=")
+                if att_val.startswith('"') and att_val.endswith('"'):
+                    att_val = att_val[1:-1].replace('_', ' ')
+                else:
+                    try:
+                        att_val = eval(att_val)
+                    except (SyntaxError, NameError):
+                        continue
+                kwargs[att_name] = att_val
+        
+        if 'id' not in kwargs:
+            kwargs['id'] = str(uuid.uuid4())
+        if 'created_at' not in kwargs:
+            kwargs['created_at'] = datetime.now().isoformat()
+        if 'updated_at' not in kwargs:
+            kwargs['updated_at'] = datetime.now().isoformat()
+
+        new_instance = HBNBCommand.classes[c_name](**kwargs)
+        storage.new(new_instance) 
         storage.save()
         print(new_instance.id)
-        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
@@ -272,7 +299,7 @@ class HBNBCommand(cmd.Cmd):
                 args.append(v)
         else:  # isolate args
             args = args[2]
-            if args and args[0] is '\"':  # check for quoted arg
+            if args and args[0] == '\"':  # check for quoted arg
                 second_quote = args.find('\"', 1)
                 att_name = args[1:second_quote]
                 args = args[second_quote + 1:]
@@ -280,10 +307,10 @@ class HBNBCommand(cmd.Cmd):
             args = args.partition(' ')
 
             # if att_name was not quoted arg
-            if not att_name and args[0] is not ' ':
+            if not att_name and args[0] != ' ':
                 att_name = args[0]
             # check for quoted val arg
-            if args[2] and args[2][0] is '\"':
+            if args[2] and args[2][0] == '\"':
                 att_val = args[2][1:args[2].find('\"', 1)]
 
             # if att_val was not quoted arg
