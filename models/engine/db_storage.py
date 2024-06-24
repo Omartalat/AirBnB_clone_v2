@@ -33,13 +33,6 @@ class DBStorage:
 
     def all(self, cls=None):
         """Query all objects depending on the class name (argument cls)"""
-        from models.state import State
-        from models.city import City
-        from models.user import User
-        from models.place import Place
-        from models.review import Review
-        from models.amenity import Amenity
-
         obj_dict = {}
         try:
             class_dict = {
