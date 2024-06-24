@@ -31,23 +31,27 @@ class DBStorage:
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
-        """ Query all objects depending of the class name (argument cls)"""
+        """Query all objects depending on the class name (argument cls)"""
         obj_dict = {}
-        if cls:
-            if type(cls) == str:
-                cls = eval(cls)
-            objs = self.__session.query(cls).all()
-        else:
-            objs = self.__session.query(State).all()
-            objs.extend(self.__session.query(City).all())
-            objs.extend(self.__session.query(User).all())
-            objs.extend(self.__session.query(Place).all())
-            objs.extend(self.__session.query(Review).all())
-            objs.extend(self.__session.query(Amenity).all())
+        try:
+            if cls:
+                if isinstance(cls, str):
+                    try:
+                        cls = eval(cls)
+                    except NameError:
+                        raise ValueError(f"Class '{cls}' is not defined.")
+                objs = self.__session.query(cls).all()
+            else:
+                classes = [State, City, User, Place, Review, Amenity]
+                objs = []
+                for class_ in classes:
+                    objs.extend(self.__session.query(class_).all())
 
-        for obj in obj:
-            key = '{}.{}'.format(type(obj).__name__, obj.id)
-            obj_dict[key] = obj
+            for obj in objs:
+                key = '{}.{}'.format(type(obj).__name__, obj.id)
+                obj_dict[key] = obj
+        except Exception as e:
+            print(f"An error occurred: {e}")
         return obj_dict
 
     def new(self, obj):
