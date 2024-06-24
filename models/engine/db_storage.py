@@ -2,7 +2,6 @@
 """New engine"""
 import os
 from models.amenity import Amenity
-from models.engine.file_storage import FileStorage
 from models.review import Review
 from models.state import State
 from models.base_model import Base
