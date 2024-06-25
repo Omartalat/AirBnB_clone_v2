@@ -237,7 +237,7 @@ class HBNBCommand(cmd.Cmd):
         if os.environ.get('HBNB_TYPE_STORAGE') != 'db':
             objs = storage._FileStorage__objects.items()
         else:
-            objs = storage.all()
+            objs = storage._DBStorage.all()
 
         for k, v in objs:
             if not args or k.split('.')[0] == args:
