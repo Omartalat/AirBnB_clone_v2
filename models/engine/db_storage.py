@@ -46,10 +46,6 @@ class DBStorage:
         if cls:
             if isinstance(cls, str):
                 cls = class_dict.get(cls)
-                if not cls:
-                    raise ValueError(f"Class '{cls}' is not defined.")
-            if not isinstance(cls, type):
-                raise TypeError(f"Expected a class type, got {type(cls)} instead.")
             objs = self.__session.query(cls).all()
             for obj in objs:
                 key = f"{obj.__class__.__name__}.{obj.id}"

@@ -234,11 +234,10 @@ class HBNBCommand(cmd.Cmd):
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-        if os.environ.get('HBNB_TYPE_STORAGE') != 'db':
-            objs = storage._FileStorage__objects.items()
+            cls_ = HBNBCommand.classes.get(args)
+            objs = storage.all(cls_).items()
         else:
-            objs = storage.all()
-
+            objs = storage.all().items()
         for k, v in objs:
             if not args or k.split('.')[0] == args:
                 print_list.append(str(v))
