@@ -238,9 +238,8 @@ class HBNBCommand(cmd.Cmd):
             objs = storage.all(cls_).items()
         else:
             objs = storage.all().items()
-        for k, v in objs:
-            if not args or k.split('.')[0] == args:
-                print_list.append(v)
+        for obj in objs:
+                print_list.append(objs[obj].__str__())
 
         print(print_list)
 
