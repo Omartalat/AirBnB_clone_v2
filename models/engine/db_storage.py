@@ -46,13 +46,12 @@ class DBStorage:
         if cls:
             if isinstance(cls, str):
                 cls = class_dict.get(cls)
-            objs = self.__session.query(cls).all()
+            objs = self.__session.query(cls)
             for obj in objs:
                 key = f"{obj.__class__.__name__}.{obj.id}"
                 obj_dict[key] = obj
         else:
-            classes = [User, State, City, Amenity, Place, Review]
-            for cls in classes:
+            for _, cls in class_dict:
                 objs = self.__session.query(cls).all()
                 for obj in objs:
                     key = f"{obj.__class__.__name__}.{obj.id}"
