@@ -29,11 +29,11 @@ class FileStorage:
         if cls is None:
             return self.__objects
         else:
-            s = {}
+            cls_dict = {}
             for k, v in self.__objects.items():
-                if cls == v.__class__ or cls == v.__class__.__name__:
-                    s[k] = v
-            return s
+                if cls == type(v):
+                    cls_dict[k] = v
+            return cls_dict
 
     def new(self, obj):
         """
@@ -74,9 +74,10 @@ class FileStorage:
         """
         Deletes the object
         """
-        if obj is not None:
-            del FileStorage.__objects["{}.{}".format(obj.__class__.__name__,
-                                                     obj.id)]
+        if obj:
+            key = "{}.{}".format(obj.__class__.__name__, obj.id)
+            if key in self.__objects.keys():
+                del self.__objects[key]
 
     def close(self):
         """
