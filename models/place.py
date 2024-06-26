@@ -18,6 +18,7 @@ association_table = Table("place_amenity", Base.metadata,
                                  ForeignKey("amenities.id"),
                                  primary_key=True, nullable=False))
 
+
 class Place(BaseModel, Base):
     """ A place to stay """
     __tablename__ = 'places'
@@ -58,4 +59,4 @@ class Place(BaseModel, Base):
         @amenities.setter
         def amenities(self, value):
             if type(value) == Amenity:
-                self.amenity_ids.append(value.id) 
+                self.amenity_ids.append(value.id)
