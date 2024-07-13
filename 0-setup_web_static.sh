@@ -8,6 +8,7 @@ sudo apt-get install -y nginx
 
 # Create some folders if it doesn’t already exist
 sudo mkdir -p /data/web_static/releases/test/
+sudo mkdir -p /data/web_static/shared/
 
 # Create a fake HTML file /data/web_static/releases/test/index.html
 echo 'Hello Alx!' | sudo tee /data/web_static/releases/test/index.html
