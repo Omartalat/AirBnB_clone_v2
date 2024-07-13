@@ -11,7 +11,7 @@ from os.path import isdir
 def do_pack():
     """Compresses the web_static folder into a .tgz archive"""
     try:
-        day = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        day = datetime.now().strftime("%Y%m%d%H%M%S")
         if isdir("versions") is False:
             local("mkdir versions")
         file_N = "versions/web_static_{}.tgz".format(day)
