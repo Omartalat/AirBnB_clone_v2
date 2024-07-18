@@ -6,7 +6,6 @@
 from datetime import datetime
 from fabric.api import local, put, run, env
 from os.path import isdir, exists
-env.user = 'ubuntu'
 env.hosts = ['100.26.142.122', '54.157.158.117']
 
 
@@ -14,8 +13,8 @@ def do_pack():
     """Compresses the web_static folder into a .tgz archive"""
     try:
         day = datetime.now().strftime("%Y%m%d%H%M%S")
-            if not isdir("versions"):
-                local("mkdir versions")
+        if not isdir("versions"):
+            local("mkdir versions")
         file_N = "versions/web_static_{}.tgz".format(day)
         local("tar -czvf {} web_static".format(file_N))
         return file_N
