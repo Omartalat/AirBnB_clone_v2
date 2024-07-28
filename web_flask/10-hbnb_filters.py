@@ -1,17 +1,19 @@
 #!/usr/bin/python3
 """script that starts a Flask web application"""
+from models.state import State
 from flask import Flask, render_template
 from models import storage
-from models.state import State
+from models.amenity import Amenity
 
 app = Flask(__name__)
 
 
-@app.route('/cities_by_states', strict_slashes=False)
-def cities_by_states():
-    """display a HTML page: (inside the tag BODY)"""
+@app.route('/hbnb_filters', strict_slashes=False)
+def hbnb_filters():
+    """display a HTML page 6-index.html"""
     states = storage.all(State)
-    return render_template('8-cities_by_states.html', states=states)
+    amenities = storage.all(Amenity)
+    return render_template('10-hbnb_filters.html', states=states, amenities=amenities)
 
 
 @app.teardown_appcontext
