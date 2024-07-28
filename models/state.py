@@ -26,8 +26,8 @@ class State(BaseModel, Base):
             list of city
             """
             from models import storage
-            li = []
+            list_ = []
             for k, v in storage.all(City).items():
                 if v.state_id == self.id:
-                    li.append(v)
-            return li
+                    list_.append(v)
+            return list_
